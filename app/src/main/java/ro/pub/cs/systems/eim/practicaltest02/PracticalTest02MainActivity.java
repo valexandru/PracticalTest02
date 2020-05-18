@@ -25,7 +25,7 @@ public class PracticalTest02MainActivity extends AppCompatActivity {
     private TextView currencyTextView = null;
 
     private ServerThread serverThread = null;
-//    private ClientThread clientThread = null;
+    private ClientThread clientThread = null;
 
     private ConnectButtonClickListener connectButtonClickListener = new ConnectButtonClickListener();
     private class ConnectButtonClickListener implements Button.OnClickListener {
@@ -43,6 +43,39 @@ public class PracticalTest02MainActivity extends AppCompatActivity {
                 return;
             }
             serverThread.start();
+        }
+
+    }
+
+    private GetWeatherForecastButtonClickListener getWeatherForecastButtonClickListener = new GetWeatherForecastButtonClickListener();
+    private class GetWeatherForecastButtonClickListener implements Button.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            String clientAddress = clientAddressEditText.getText().toString();
+            String clientPort = clientPortEditText.getText().toString();
+            if (clientAddress == null || clientAddress.isEmpty()
+                    || clientPort == null || clientPort.isEmpty()) {
+                Toast.makeText(getApplicationContext(), "[MAIN ACTIVITY] Client connection parameters should be filled!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if (serverThread == null || !serverThread.isAlive()) {
+                Toast.makeText(getApplicationContext(), "[MAIN ACTIVITY] There is no server to connect to!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String currency = informationTypeSpinner.getSelectedItem().toString();
+            if (currency == null || currency.isEmpty()) {
+                Toast.makeText(getApplicationContext(), "[MAIN ACTIVITY] Parameters from client (city / information type) should be filled", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            currencyTextView.setText(Constants.EMPTY_STRING);
+
+            clientThread = new ClientThread(
+                    clientAddress, Integer.parseInt(clientPort), currency, currencyTextView
+            );
+            clientThread.start();
         }
 
     }
