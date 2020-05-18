@@ -1,2 +1,3 @@
 # PracticalTest02
-Colocviu 2 EIM
+Vochescu Alexandru
+Grupa 341C1
