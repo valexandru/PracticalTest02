@@ -43,6 +43,12 @@ public class ServerThread extends Thread {
                 ioException.printStackTrace();
             }
         }
+        ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(1);
+        scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
+            public void run() {
+                getData();
+            }
+        }, 0, 60, TimeUnit.SECONDS);
     }
 
     public double getEUR() {
@@ -87,12 +93,6 @@ public class ServerThread extends Thread {
 
     @Override
     public void run() {
-        ScheduledExecutorService scheduleTaskExecutor = Executors.newScheduledThreadPool(5);
-        scheduleTaskExecutor.scheduleAtFixedRate(new Runnable() {
-            public void run() {
-                getData();
-            }
-        }, 0, 1, TimeUnit.MINUTES);
 
         try {
             while (!Thread.currentThread().isInterrupted()) {
